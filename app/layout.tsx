@@ -23,12 +23,15 @@ export const metadata: Metadata = {
     title: "The Show - Live Performance Experience",
     description: "Experience an unforgettable live show. Get tickets for upcoming performances and watch our exclusive trailer.",
     type: "website",
-    images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
+    // Replace with your OG image if needed
+    images: [],
+    siteName: "The Show",
+    url: "https://www.instagram.com/didiwinlive",
   },
   twitter: {
     card: "summary_large_image",
-    site: "@Lovable",
-    images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
+    site: "@didiwinlive",
+    images: [],
   },
 };
 
@@ -51,4 +54,3 @@ export default function RootLayout({
     </html>
   );
 }
-
