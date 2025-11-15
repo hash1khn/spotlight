@@ -15,7 +15,7 @@ const UpcomingShows = () => {
           </h2>
           <div className="w-24 h-0.5 bg-primary mx-auto mb-8" />
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Don't miss out on these incredible performances. Get your tickets today.
+            {"Don't miss out on these incredible performances. Get your tickets today."}
           </p>
         </div>
 

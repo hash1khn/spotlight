@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import heroImage from "@/assets/show-poster.jpg";
+import heroImage from "@/assets/Game Show H.jpg";
 
 const Hero = () => {
   return (
@@ -12,6 +12,7 @@ const Hero = () => {
           fill
           className="object-cover"
           priority
+          sizes="(max-width: 768px) 100vw, 100vw"
         />
         <div className="absolute inset-0 bg-black/20" />
       </div>
