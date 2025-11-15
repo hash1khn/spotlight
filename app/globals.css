@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 260 60% 5%;
+    --foreground: 60 9% 98%;
+
+    --card: 260 50% 10%;
+    --card-foreground: 60 9% 98%;
+
+    --popover: 260 50% 10%;
+    --popover-foreground: 60 9% 98%;
+
+    --primary: 48 100% 55%;
+    --primary-foreground: 260 60% 8%;
+
+    --secondary: 320 85% 60%;
+    --secondary-foreground: 260 60% 8%;
+
+    --muted: 260 40% 18%;
+    --muted-foreground: 215 20% 70%;
+
+    --accent: 280 80% 65%;
+    --accent-foreground: 260 60% 8%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 60 9% 98%;
+
+    --border: 260 40% 25%;
+    --input: 260 40% 25%;
+    --ring: 48 100% 55%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 260 60% 5%;
+    --sidebar-foreground: 60 9% 98%;
+    --sidebar-primary: 48 100% 55%;
+    --sidebar-primary-foreground: 260 60% 8%;
+    --sidebar-accent: 260 50% 10%;
+    --sidebar-accent-foreground: 60 9% 98%;
+    --sidebar-border: 260 40% 25%;
+    --sidebar-ring: 48 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer utilities {
+  /* Lighter glitter animation keyframes */
+  @keyframes glitter {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0;
+      transform: rotate(0deg) scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: rotate(180deg) scale(1);
+    }
+  }
+
+  .animate-glitter {
+    animation: glitter 2s ease-in-out infinite;
+  }
+
+  .animate-sparkle {
+    animation: sparkle 3s ease-in-out infinite;
+  }
+}
