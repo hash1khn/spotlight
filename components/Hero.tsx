@@ -10,11 +10,11 @@ const Hero = () => {
           src={heroImage} 
           alt="Did I Win? Game Show" 
           fill
-          className="object-cover"
+          className="object-cover animate-fade-in"
           priority
           sizes="(max-width: 768px) 100vw, 100vw"
         />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-black/20 opacity-0 animate-fade-in" style={{ animationDelay: '0.2s' }} />
       </div>
     </section>
   );

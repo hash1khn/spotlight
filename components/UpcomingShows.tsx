@@ -1,12 +1,41 @@
 "use client"
 import ShowCard from "./ShowCard";
 import showsData from "@/data/shows.json";
+import { useEffect, useRef, useState } from "react";
 
 const UpcomingShows = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section id="shows" className="relative py-32 bg-background overflow-hidden">
+    <section ref={sectionRef} id="shows" className="relative py-32 bg-background overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-20">
+        <div className={`text-center mb-20 transition-all duration-700 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <div className="inline-block mb-6">
             <span className="text-primary text-xs font-bold uppercase tracking-[0.3em]">Live Performances</span>
           </div>
@@ -20,7 +49,7 @@ const UpcomingShows = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          {showsData.map((show) => (
+          {showsData.map((show, index) => (
             <ShowCard
               key={show.id}
               title={show.title}
@@ -29,6 +58,7 @@ const UpcomingShows = () => {
               location={show.location}
               address={show.address}
               ticketLink={show.ticketLink}
+              index={index}
             />
           ))}
         </div>
