@@ -71,3 +71,38 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Admin Panel
+
+This project includes a simple admin panel that allows you to manage upcoming shows without any technical knowledge or database setup.
+
+### Features
+
+- **No Database Required**: All data is stored in a JSON file (`data/shows.json`)
+- **Easy to Use**: Simple interface to add, edit, or delete shows
+- **Password Protected**: Secure access with password authentication
+
+### How to Access
+
+1. Navigate to `/admin/login` in your browser
+2. Enter the admin password (default: `admin123`)
+3. You'll be redirected to the admin dashboard
+
+### Setting a Custom Password
+
+To set a custom admin password, create a `.env.local` file in the root directory and add:
+
+```
+ADMIN_PASSWORD=your-secure-password-here
+```
+
+**Important**: Make sure to add `.env.local` to your `.gitignore` file to keep your password secure.
+
+### Managing Shows
+
+Once logged in, you can:
+- **Add Shows**: Click the "Add Show" button and fill in the show details
+- **Edit Shows**: Click the "Edit" button next to any show to modify its information
+- **Delete Shows**: Click the "Delete" button to remove a show (with confirmation)
+
+All changes are saved immediately to the `data/shows.json` file and will be reflected on your website.
