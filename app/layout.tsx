@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "The Show - Live Performance Experience",
+  title: "DID I WIN? - America's Favorite Comedy Game Show",
   description: "Experience an unforgettable live show. Get tickets for upcoming performances and watch our exclusive trailer.",
   authors: [{ name: "The Show" }],
   openGraph: {
