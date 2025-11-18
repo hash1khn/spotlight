@@ -230,6 +230,13 @@ export default function AdminDashboard() {
     return new Date(year, month - 1, day);
   };
 
+  const formatDateInputValue = (date: Date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const formatDate = (dateString: string) => {
     const date = getLocalDate(dateString);
     return date.toLocaleDateString("en-US", {
@@ -384,8 +391,8 @@ export default function AdminDashboard() {
                       selected={selectedDateValue ? getLocalDate(selectedDateValue) : undefined}
                       onSelect={(date) => {
                         if (date) {
-                          const formatted = date.toISOString().split("T")[0];
-                          setValue("date", formatted, { shouldValidate: true });
+                          const formatted = formatDateInputValue(date);
+                          setValue("date", formatted, { shouldValidate: true, shouldDirty: true });
                         }
                       }}
                       initialFocus
