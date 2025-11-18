@@ -40,21 +40,26 @@ const ShowCard = ({ date, time, location, address, ticketLink, index = 0 }: Show
     };
   }, []);
 
+  const getLocalDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   const formatNumericDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return getLocalDate(dateString).toLocaleDateString("en-US", {
       month: "2-digit",
       day: "2-digit",
     });
   };
 
   const formatWeekday = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return getLocalDate(dateString).toLocaleDateString("en-US", {
       weekday: "short",
     });
   };
 
   const formatFullDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return getLocalDate(dateString).toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",

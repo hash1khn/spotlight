@@ -36,7 +36,10 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, LogOut } from "lucide-react";
+import { Plus, Edit, Trash2, LogOut, Calendar as CalendarIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 interface Show {
   id: number;
@@ -73,10 +76,13 @@ export default function AdminDashboard() {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ShowFormValues>({
     resolver: zodResolver(showSchema),
   });
+  const selectedDateValue = watch("date");
 
   // Check authentication
   useEffect(() => {
@@ -219,8 +225,13 @@ export default function AdminDashboard() {
     }
   };
 
+  const getLocalDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+    const date = getLocalDate(dateString);
     return date.toLocaleDateString("en-US", {
       weekday: "long",
       year: "numeric",
@@ -348,11 +359,40 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="date">Date *</Label>
-                <Input
-                  id="date"
-                  type="date"
-                  {...register("date")}
-                />
+                <Popover>
+                  <div className="relative">
+                    <Input
+                      readOnly
+                      value={selectedDateValue ? formatDate(selectedDateValue) : ""}
+                      placeholder="Select date"
+                      className={cn("pr-10", !selectedDateValue && "text-muted-foreground")}
+                    />
+                    <PopoverTrigger asChild>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        className="absolute right-1 top-1/2 -translate-y-1/2"
+                      >
+                        <CalendarIcon className="h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+                  </div>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDateValue ? getLocalDate(selectedDateValue) : undefined}
+                      onSelect={(date) => {
+                        if (date) {
+                          const formatted = date.toISOString().split("T")[0];
+                          setValue("date", formatted, { shouldValidate: true });
+                        }
+                      }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <input id="date" type="hidden" {...register("date")} />
                 {errors.date && (
                   <p className="text-sm text-destructive">{errors.date.message}</p>
                 )}
