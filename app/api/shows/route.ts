@@ -15,7 +15,7 @@ async function checkAuth(): Promise<boolean> {
 // GET - Read all shows
 export async function GET() {
   try {
-    const db = getDatabaseClient();
+    const db = getDatabaseClient() as any;
 
     const { data, error } = await db
       .from("shows")
@@ -59,11 +59,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Date must be YYYY-MM-DD" }, { status: 400 });
     }
 
-    const db = getDatabaseClient();
+    const db = getDatabaseClient() as any;
 
     const { data, error } = await db
       .from("shows")
-      .insert({ title, date, time, location, address, ticketlink })
+      .insert({ title, date, time, location, address, ticketlink } as any)
       .select()
       .single();
 
@@ -106,11 +106,11 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Date must be YYYY-MM-DD" }, { status: 400 });
     }
 
-    const db = getDatabaseClient();
+    const db = getDatabaseClient() as any;
 
     const { data, error } = await db
       .from("shows")
-      .update({ title, date, time, location, address, ticketlink })
+      .update({ title, date, time, location, address, ticketlink } as any)
       .eq("id", id)
       .select()
       .single();
@@ -138,7 +138,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Valid ID required" }, { status: 400 });
     }
 
-    const db = getDatabaseClient();
+    const db = getDatabaseClient() as any;
 
     const { error } = await db.from("shows").delete().eq("id", id);
 

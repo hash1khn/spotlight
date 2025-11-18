@@ -9,11 +9,11 @@ interface ShowCardProps {
   time: string;
   location: string;
   address: string;
-  ticketLink: string;
+  ticketlink: string;
   index?: number;
 }
 
-const ShowCard = ({ date, time, location, address, ticketLink, index = 0 }: ShowCardProps) => {
+const ShowCard = ({ date, time, location, address, ticketlink, index = 0 }: ShowCardProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -105,15 +105,15 @@ const ShowCard = ({ date, time, location, address, ticketLink, index = 0 }: Show
           </div>
 
           <div className="w-full md:w-auto md:flex-none">
-            <Button 
-              asChild 
-              className="w-full bg-primary text-primary-foreground font-bold text-sm uppercase tracking-wider py-4 hover:bg-primary/90 transition-all duration-300 rounded-none hover:scale-[1.02] hover:shadow-md"
-            >
-              <a href={ticketLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                Get Tickets
-                <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-            </Button>
+            <Button
+  className="w-full bg-primary text-primary-foreground font-bold text-sm uppercase tracking-wider py-4 hover:bg-primary/90 transition-all duration-300 rounded-none hover:scale-[1.02] hover:shadow-md"
+>
+  <a href={ticketlink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full h-full">
+    Get Tickets
+    <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+  </a>
+</Button>
+
           </div>
         </div>
       </CardContent>

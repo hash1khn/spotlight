@@ -9,7 +9,7 @@ interface Show {
   time: string;
   location: string;
   address: string;
-  ticketLink: string;
+  ticketlink: string;
 }
 
 const UpcomingShows = () => {
@@ -71,7 +71,7 @@ const UpcomingShows = () => {
               time={show.time}
               location={show.location}
               address={show.address}
-              ticketLink={show.ticketLink}
+              ticketlink={show.ticketlink}
               index={index}
             />
           ))}
