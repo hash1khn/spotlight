@@ -112,22 +112,9 @@ const VideoSection = () => {
       )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-5xl mx-auto">
-          <div className={`text-center mb-16 transition-all duration-700 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
-            <div className="inline-block mb-6">
-              <span className="text-primary text-xs font-bold uppercase tracking-[0.3em]">Watch</span>
-            </div>
-            <h2 className="text-6xl md:text-7xl lg:text-8xl font-bold text-foreground mb-8 tracking-tighter">
-              Trailer
-            </h2>
-            <div className="w-24 h-0.5 bg-primary mx-auto mb-8" />
-            <p className="text-lg md:text-xl text-muted-foreground">
-              Get a glimpse of what awaits you
-            </p>
-          </div>
-
+        <div className={`max-w-5xl mx-auto transition-all duration-700 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <div className={`relative w-full border border-border overflow-hidden transition-all duration-700 ${
             isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`} style={{ paddingBottom: '56.25%', transitionDelay: '0.2s' }}>
