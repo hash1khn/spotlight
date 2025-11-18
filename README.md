@@ -74,11 +74,11 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 
 ## Admin Panel
 
-This project includes a simple admin panel that allows you to manage upcoming shows without any technical knowledge or database setup.
+This project includes a simple admin panel that allows you to manage upcoming shows with a lightweight SQLite-compatible database (powered by libSQL/Turso).
 
 ### Features
 
-- **No Database Required**: All data is stored in a JSON file (`data/shows.json`)
+- **SQLite Storage**: Show data is stored in a persistent SQLite database that works locally and in production
 - **Easy to Use**: Simple interface to add, edit, or delete shows
 - **Password Protected**: Secure access with password authentication
 
@@ -105,4 +105,18 @@ Once logged in, you can:
 - **Edit Shows**: Click the "Edit" button next to any show to modify its information
 - **Delete Shows**: Click the "Delete" button to remove a show (with confirmation)
 
-All changes are saved immediately to the `data/shows.json` file and will be reflected on your website.
+All changes are saved immediately to the SQLite database and will be reflected on your website.
+
+### Database Setup
+
+The API routes connect to SQLite via the [`@libsql/client`](https://github.com/tursodatabase/libsql-client) driver. You can point the app either at a local file database or at a hosted Turso/libSQL database.
+
+Create `.env.local` (and configure the same values in your deployment platform):
+
+```
+ADMIN_PASSWORD=your-secure-password-here
+DATABASE_URL=libsql://<your-db>.turso.io
+DATABASE_AUTH_TOKEN=<your-db-auth-token>
+```
+
+For local development you can use Turso’s local replica (`turso dev --db show-spotlight`) or any libSQL-compatible URL. The API layer automatically creates the `shows` table if it does not exist.

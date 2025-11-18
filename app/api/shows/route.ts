@@ -1,147 +1,148 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { cookies } from "next/headers";
+import { getDatabaseClient } from "@/lib/db";
 
-const showsFilePath = path.join(process.cwd(), "data", "shows.json");
-
-interface Show {
-  id: number;
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  address: string;
-  ticketLink: string;
+// Authentication helper
+async function checkAuth(): Promise<boolean> {
+  try {
+    const authCookie = (await cookies()).get("admin-auth");
+    return authCookie?.value === "authenticated";
+  } catch {
+    return false;
+  }
 }
 
 // GET - Read all shows
 export async function GET() {
   try {
-    const fileContents = await fs.readFile(showsFilePath, "utf8");
-    const shows = JSON.parse(fileContents);
-    return NextResponse.json(shows);
+    const db = getDatabaseClient();
+
+    const { data, error } = await db
+      .from("shows")
+      .select("*")
+      .order("date", { ascending: true })
+      .order("time", { ascending: true });
+
+    if (error) throw error;
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error reading shows:", error);
     return NextResponse.json({ error: "Failed to read shows" }, { status: 500 });
   }
 }
 
-// POST - Add a new show
+// POST - Add new show
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { title, date, time, location, address, ticketLink } = body;
-
-    // Validate required fields
-    if (!title || !date || !time || !location || !address || !ticketLink) {
-      return NextResponse.json(
-        { error: "All fields are required" },
-        { status: 400 }
-      );
+    // Auth check
+    if (!(await checkAuth())) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }
 
-    // Read existing shows
-    const fileContents = await fs.readFile(showsFilePath, "utf8");
-    const shows: Show[] = JSON.parse(fileContents);
+    const { title, date, time, location, address, ticketlink } =
+      await request.json();
 
-    // Generate new ID
-    const newId = shows.length > 0 ? Math.max(...shows.map((s) => s.id)) + 1 : 1;
+    // Validation
+    if (!title || !date || !time || !location || !address || !ticketlink) {
+      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    }
 
-    // Add new show
-    const newShow: Show = {
-      id: newId,
-      title,
-      date,
-      time,
-      location,
-      address,
-      ticketLink,
-    };
+    try {
+      new URL(ticketlink);
+    } catch {
+      return NextResponse.json({ error: "Ticket link must be a valid URL" }, { status: 400 });
+    }
 
-    shows.push(newShow);
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
+      return NextResponse.json({ error: "Date must be YYYY-MM-DD" }, { status: 400 });
+    }
 
-    // Write back to file
-    await fs.writeFile(showsFilePath, JSON.stringify(shows, null, 2), "utf8");
+    const db = getDatabaseClient();
 
-    return NextResponse.json(newShow, { status: 201 });
+    const { data, error } = await db
+      .from("shows")
+      .insert({ title, date, time, location, address, ticketlink })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error("Error adding show:", error);
     return NextResponse.json({ error: "Failed to add show" }, { status: 500 });
   }
 }
 
-// PUT - Update an existing show
+// PUT - Update show
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { id, title, date, time, location, address, ticketLink } = body;
+    // Auth check
+    if (!(await checkAuth())) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    const { id, title, date, time, location, address, ticketlink } =
+      await request.json();
 
     if (!id) {
-      return NextResponse.json({ error: "Show ID is required" }, { status: 400 });
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
-    // Validate required fields
-    if (!title || !date || !time || !location || !address || !ticketLink) {
-      return NextResponse.json(
-        { error: "All fields are required" },
-        { status: 400 }
-      );
+    if (!title || !date || !time || !location || !address || !ticketlink) {
+      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
-    // Read existing shows
-    const fileContents = await fs.readFile(showsFilePath, "utf8");
-    const shows: Show[] = JSON.parse(fileContents);
-
-    // Find and update show
-    const showIndex = shows.findIndex((s) => s.id === id);
-    if (showIndex === -1) {
-      return NextResponse.json({ error: "Show not found" }, { status: 404 });
+    try {
+      new URL(ticketlink);
+    } catch {
+      return NextResponse.json({ error: "Ticket link must be valid" }, { status: 400 });
     }
 
-    shows[showIndex] = {
-      id,
-      title,
-      date,
-      time,
-      location,
-      address,
-      ticketLink,
-    };
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
+      return NextResponse.json({ error: "Date must be YYYY-MM-DD" }, { status: 400 });
+    }
 
-    // Write back to file
-    await fs.writeFile(showsFilePath, JSON.stringify(shows, null, 2), "utf8");
+    const db = getDatabaseClient();
 
-    return NextResponse.json(shows[showIndex]);
+    const { data, error } = await db
+      .from("shows")
+      .update({ title, date, time, location, address, ticketlink })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error updating show:", error);
     return NextResponse.json({ error: "Failed to update show" }, { status: 500 });
   }
 }
 
-// DELETE - Delete a show
+// DELETE - Remove show
 export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = parseInt(searchParams.get("id") || "");
-
-    if (!id || isNaN(id)) {
-      return NextResponse.json({ error: "Valid show ID is required" }, { status: 400 });
+    // Auth check
+    if (!(await checkAuth())) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }
 
-    // Read existing shows
-    const fileContents = await fs.readFile(showsFilePath, "utf8");
-    const shows: Show[] = JSON.parse(fileContents);
+    const id = parseInt(new URL(request.url).searchParams.get("id") || "0");
 
-    // Find and remove show
-    const showIndex = shows.findIndex((s) => s.id === id);
-    if (showIndex === -1) {
-      return NextResponse.json({ error: "Show not found" }, { status: 404 });
+    if (!id) {
+      return NextResponse.json({ error: "Valid ID required" }, { status: 400 });
     }
 
-    shows.splice(showIndex, 1);
+    const db = getDatabaseClient();
 
-    // Write back to file
-    await fs.writeFile(showsFilePath, JSON.stringify(shows, null, 2), "utf8");
+    const { error } = await db.from("shows").delete().eq("id", id);
+
+    if (error) throw error;
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -149,4 +150,3 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Failed to delete show" }, { status: 500 });
   }
 }
-

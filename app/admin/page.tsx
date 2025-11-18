@@ -48,7 +48,7 @@ interface Show {
   time: string;
   location: string;
   address: string;
-  ticketLink: string;
+  ticketlink: string;
 }
 
 const showSchema = z.object({
@@ -57,7 +57,7 @@ const showSchema = z.object({
   time: z.string().min(1, "Time is required"),
   location: z.string().min(1, "Location is required"),
   address: z.string().min(1, "Address is required"),
-  ticketLink: z.string().url("Must be a valid URL"),
+  ticketlink: z.string().url("Must be a valid URL"),
 });
 
 type ShowFormValues = z.infer<typeof showSchema>;
@@ -145,7 +145,7 @@ export default function AdminDashboard() {
       time: show.time,
       location: show.location,
       address: show.address,
-      ticketLink: show.ticketLink,
+      ticketlink: show.ticketlink,
     });
     setIsDialogOpen(true);
   };
@@ -443,15 +443,15 @@ export default function AdminDashboard() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="ticketLink">Ticket Link *</Label>
+              <Label htmlFor="ticketlink">Ticket Link *</Label>
               <Input
-                id="ticketLink"
+                id="ticketlink"
                 type="url"
                 placeholder="https://..."
-                {...register("ticketLink")}
+                {...register("ticketlink")}
               />
-              {errors.ticketLink && (
-                <p className="text-sm text-destructive">{errors.ticketLink.message}</p>
+              {errors.ticketlink && (
+                <p className="text-sm text-destructive">{errors.ticketlink.message}</p>
               )}
             </div>
 
