@@ -20,12 +20,12 @@ export const metadata: Metadata = {
   description: "Experience an unforgettable live show. Get tickets for upcoming performances and watch our exclusive trailer.",
   authors: [{ name: "The Show" }],
   openGraph: {
-    title: "The Show - Live Performance Experience",
+    title: "DID I WIN? Live Game Show",
     description: "Experience an unforgettable live show. Get tickets for upcoming performances and watch our exclusive trailer.",
     type: "website",
     // Replace with your OG image if needed
     images: [],
-    siteName: "The Show",
+    siteName: "DID I WIN? Live Game Show",
     url: "https://www.instagram.com/didiwinlive",
   },
   twitter: {
